@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: deploy
 
 on:
   push:
@@ -11,11 +11,15 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-        uses: actions/checkout@v4
-        uses: ncipollo/release-action@v1
-        
-        with:
-          path: ./src
-        uses: actions/deploy-pages@v4
+      - name: Checkout
+      - uses: actions/checkout@v3
+
+      - name: Install Dependencies
+      - run: pnpm install
+
+      - name: Build
+      - run: pnpm run build
+
+      - name: Deploy Docs
+      - uses: peaceiris/actions-gh-pages@v3
