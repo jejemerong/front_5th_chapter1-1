@@ -1,0 +1,21 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+        uses: actions/checkout@v4
+        uses: ncipollo/release-action@v1
+        
+        with:
+          path: ./src
+        uses: actions/deploy-pages@v4
