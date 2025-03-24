@@ -1,4 +1,4 @@
-(function(){const o=document.createElement("link").relList;if(o&&o.supports&&o.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))c(e);new MutationObserver(e=>{for(const s of e)if(s.type==="childList")for(const a of s.addedNodes)a.tagName==="LINK"&&a.rel==="modulepreload"&&c(a)}).observe(document,{childList:!0,subtree:!0});function p(e){const s={};return e.integrity&&(s.integrity=e.integrity),e.referrerPolicy&&(s.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?s.credentials="include":e.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function c(e){if(e.ep)return;e.ep=!0;const s=p(e);fetch(e.href,s)}})();const u=t=>`
+(function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const o of document.querySelectorAll('link[rel="modulepreload"]'))a(o);new MutationObserver(o=>{for(const l of o)if(l.type==="childList")for(const u of l.addedNodes)u.tagName==="LINK"&&u.rel==="modulepreload"&&a(u)}).observe(document,{childList:!0,subtree:!0});function i(o){const l={};return o.integrity&&(l.integrity=o.integrity),o.referrerPolicy&&(l.referrerPolicy=o.referrerPolicy),o.crossOrigin==="use-credentials"?l.credentials="include":o.crossOrigin==="anonymous"?l.credentials="omit":l.credentials="same-origin",l}function a(o){if(o.ep)return;o.ep=!0;const l=i(o);fetch(o.href,l)}})();const m=({isLoggedIn:t})=>`
     <div>
       <header class="bg-blue-600 text-white p-4 sticky top-0">
         <h1 class="text-2xl font-bold">항해플러스</h1>
@@ -6,20 +6,20 @@
       <nav class="bg-white shadow-md p-2 sticky top-14">
         <ul class="flex justify-around">
           <li><a href="/" class="text-blue-600">홈</a></li>
-          ${t?`<li><a href="/profile" class="text-gray-600">프로필</a></li>
-          <li><a href="#" class="text-gray-600">로그아웃</a></li>`:`<li><a href="/login" class="text-gray-600">로그인</a></li>
+          ${t?`<li><a id="profile" href="/profile" class="text-gray-600">프로필</a></li>
+          <li><a id="logout" href="/login" class="text-gray-600">로그아웃</a></li>`:`<li><a id="login" href="/login" class="text-gray-600">로그인</a></li>
           `}
         </ul>
       </nav>
     </div>
-  `,b=()=>`
+  `,f=()=>`
     <footer class="bg-gray-200 p-4 text-center">
       <p>&copy; 2024 항해플러스. All rights reserved.</p>
     </footer>
   `;function n({isLoggedIn:t}){return`
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">
-        ${u(t)}
+        ${m({isLoggedIn:t})}
         ${t?`<main class="p-4">
           <div class="mb-4 bg-white rounded-lg shadow p-4">
             <textarea
@@ -132,19 +132,19 @@
             </div>
           </div>
         </main>
-        ${b()}
+        ${f()}
       </div>
     </div>
-  `}function r(){return`
+  `}function d(){return`
   <main class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
       <h1 class="text-2xl font-bold text-center text-blue-600 mb-8">항해플러스</h1>
       <form id="login-form">
         <div class="mb-4">
-          <input type="text" placeholder="이메일 또는 전화번호" class="w-full p-2 border rounded">
+          <input id="username" type="text" placeholder="사용자 이름" class="w-full p-2 border rounded">
         </div>
         <div class="mb-6">
-          <input type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
+          <input id="password" type="password" placeholder="비밀번호" class="w-full p-2 border rounded">
         </div>
         <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded font-bold">로그인</button>
       </form>
@@ -157,17 +157,17 @@
       </div>
     </div>
   </main>
-`}function f({isLoggedIn:t}){return`
+`}function b({isLoggedIn:t}){const e=localStorage.getItem("user"),{username:i,email:a,bio:o}=JSON.parse(e);return`
     <div id="profile" id="root">
       <div class="bg-gray-100 min-h-screen flex justify-center">
         <div class="max-w-md w-full">
-          ${u(t)}
+          ${m({isLoggedIn:t})}
           <main class="p-4">
             <div class="bg-white p-8 rounded-lg shadow-md">
               <h2 class="text-2xl font-bold text-center text-blue-600 mb-8">
                 내 프로필
               </h2>
-              <form>
+              <form id="profile-form">
                 <div class="mb-4">
                   <label
                     for="username"
@@ -178,7 +178,8 @@
                     type="text"
                     id="username"
                     name="username"
-                    value="홍길동"
+                    placeholder
+                    value="${i}"
                     class="w-full p-2 border rounded"
                   />
                 </div>
@@ -192,7 +193,7 @@
                     type="email"
                     id="email"
                     name="email"
-                    value="hong@example.com"
+                    value="${a}"
                     class="w-full p-2 border rounded"
                   />
                 </div>
@@ -207,8 +208,7 @@
                     name="bio"
                     rows="4"
                     class="w-full p-2 border rounded"
-                  >
-  안녕하세요, 항해플러스에서 열심히 공부하고 있는 홍길동입니다.</textarea
+                  >${o}</textarea
                   >
                 </div>
                 <button
@@ -220,11 +220,11 @@
               </form>
             </div>
           </main>
-          ${b()}
+          ${f()}
         </div>
       </div>
     </div>
-  `}function m(){return`
+  `}function p(){return`
 <main class="bg-gray-100 flex items-center justify-center min-h-screen">
   <div class="bg-white p-8 rounded-lg shadow-md w-full text-center" style="max-width: 480px">
     <h1 class="text-2xl font-bold text-blue-600 mb-4">항해플러스</h1>
@@ -238,4 +238,4 @@
     </a>
   </div>
 </main>
-`}const i=!1;function d(t,o){window.location.pathname===t&&o()}function l(t,o){document.getElementById(t).innerHTML=o}d("/",()=>{l("root",n(i))});d("/login",()=>{l("root",r())});d("/profile",()=>{l("root",f(i))});window.addEventListener("popstate",()=>{const t=window.location.pathname;t==="/"?l("root",n(i)):t==="/login"||t==="/profile"?l("root",r()):l("root",m())});window.addEventListener("load",()=>{d("/",()=>{l("root",n(i))})});
+`}const r=()=>localStorage.getItem("user")!==null;function c(t,e){window.location.pathname===t&&e()}function s(t,e){document.getElementById(t).innerHTML=e}c("/",()=>{s("root",n({isLoggedIn:r()}))});c("/login",()=>{s("root",d())});c("/profile",()=>{s("root",b({isLoggedIn:r()}))});const g=()=>{const t=window.location.pathname,e=r();t==="/"?s("root",n({isLoggedIn:r()})):t==="/login"?s("root",d()):t==="/profile"?e?s("root",b({isLoggedIn:r()})):s("root",d()):s("root",p())};window.addEventListener("popstate",g);window.addEventListener("load",()=>{c("/",()=>{s("root",n({isLoggedIn:r()}))})});const v=function(t){if(t.target.id==="login-form"){t.preventDefault();const e=document.getElementById("username"),i=document.getElementById("password");e.value&&(localStorage.setItem("user",JSON.stringify({username:e.value,email:"",bio:""})),e.value="",i.value="",history.pushState({},"","/"),s("root",n({isLoggedIn:!0})))}if(t.target.id==="profile-form"){t.preventDefault();const e=t.target.querySelector("#username").value,i=t.target.querySelector("#email").value,a=t.target.querySelector("#bio").value;localStorage.setItem("user",JSON.stringify({username:e,email:i,bio:a}))}};window.addEventListener("submit",v);window.addEventListener("click",t=>{t.target.tagName==="A"&&(t.target.id==="logout"?(t.preventDefault(),localStorage.removeItem("user"),history.pushState({},"","/"),s("root",n({isLoggedIn:!1}))):t.target.id==="login"?(history.pushState({},"","/login"),s("root",d())):t.target.id==="profile"&&(history.pushState({},"","/profile"),s("root",b({isLoggedIn:r()}))))});
