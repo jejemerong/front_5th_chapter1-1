@@ -27,7 +27,12 @@ route("/login", () => {
 });
 
 route("/profile", () => {
-  loadContent("root", ProfilePage({ isLoggedIn: getLoginStatus() }));
+  if (!getLoginStatus()) {
+    // 로그인하지 않은 사용자가 /profile에 접근하면 /login으로 리다이렉트
+    loadContent("root", LoginPage());
+  } else {
+    loadContent("root", ProfilePage({ isLoggedIn: true }));
+  }
 });
 
 const handleRoute = () => {
@@ -36,7 +41,11 @@ const handleRoute = () => {
   if (path === "/") {
     loadContent("root", HomePage({ isLoggedIn: getLoginStatus() }));
   } else if (path === "/login") {
-    loadContent("root", LoginPage());
+    if (getLoginStatus()) {
+      history.pushState({}, "", "/");
+    } else {
+      loadContent("root", LoginPage());
+    }
   } else if (path === "/profile") {
     isLoggedIn
       ? loadContent("root", ProfilePage({ isLoggedIn: getLoginStatus() }))
@@ -55,7 +64,7 @@ window.addEventListener("load", () => {
   });
 });
 
-const handleSubmit = function (e) {
+const handleSubmit = (e) => {
   if (e.target.id === "login-form") {
     e.preventDefault();
     const username = document.getElementById("username");
@@ -73,6 +82,7 @@ const handleSubmit = function (e) {
       loadContent("root", HomePage({ isLoggedIn: true }));
     }
   }
+
   if (e.target.id === "profile-form") {
     e.preventDefault();
     const username = e.target.querySelector("#username").value;
@@ -86,17 +96,18 @@ window.addEventListener("submit", handleSubmit);
 
 window.addEventListener("click", (e) => {
   if (e.target.tagName === "A") {
+    e.preventDefault();
     if (e.target.id === "logout") {
-      e.preventDefault();
       localStorage.removeItem("user");
-      history.pushState({}, "", "/");
-      loadContent("root", HomePage({ isLoggedIn: false }));
-    } else if (e.target.id === "login") {
       history.pushState({}, "", "/login");
-      loadContent("root", LoginPage());
-    } else if (e.target.id === "profile") {
-      history.pushState({}, "", "/profile");
-      loadContent("root", ProfilePage({ isLoggedIn: getLoginStatus() }));
+    } else if (e.target.id === "login") {
+      if (getLoginStatus()) {
+        history.pushState({}, "", "/");
+      } else {
+        history.pushState({}, "", "/login");
+      }
     }
+  } else if (e.target.id === "profile") {
+    history.pushState({}, "", "/profile");
   }
 });
