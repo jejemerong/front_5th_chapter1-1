@@ -7,61 +7,46 @@ const getLoginStatus = () => {
   return localStorage.getItem("user") !== null;
 };
 
-// 현재 url 과 path 값 비교 후, 함수 실행
-function route(path, callback) {
-  if (window.location.pathname === path) {
-    callback();
-  }
-}
-
 function loadContent(elementId, content) {
   document.getElementById(elementId).innerHTML = content;
 }
 
-route("/", () => {
-  loadContent("root", HomePage({ isLoggedIn: getLoginStatus() }));
-});
-
-route("/login", () => {
-  loadContent("root", LoginPage());
-});
-
-route("/profile", () => {
-  if (!getLoginStatus()) {
-    // 로그인하지 않은 사용자가 /profile에 접근하면 /login으로 리다이렉트
-    loadContent("root", LoginPage());
-  } else {
-    loadContent("root", ProfilePage({ isLoggedIn: true }));
-  }
-});
-
-const handleRoute = () => {
-  const path = window.location.pathname;
-  const isLoggedIn = getLoginStatus();
-  if (path === "/") {
+const router = {
+  "/": () => {
     loadContent("root", HomePage({ isLoggedIn: getLoginStatus() }));
-  } else if (path === "/login") {
+  },
+  "/login": () => {
     if (getLoginStatus()) {
-      history.pushState({}, "", "/");
+      history.replaceState("", "", "/");
+      loadContent("root", HomePage({ isLoggedIn: true }));
     } else {
       loadContent("root", LoginPage());
     }
-  } else if (path === "/profile") {
-    isLoggedIn
-      ? loadContent("root", ProfilePage({ isLoggedIn: getLoginStatus() }))
-      : loadContent("root", LoginPage());
-  } else {
-    loadContent("root", ErrorPage());
-  }
+  },
+  "/profile": () => {
+    if (!getLoginStatus()) {
+      loadContent("root", LoginPage());
+    } else {
+      loadContent("root", ProfilePage({ isLoggedIn: true }));
+    }
+  },
 };
 
-// window 객체에서 path 감지
-window.addEventListener("popstate", handleRoute);
+function handleRoute(path) {
+  if (router[path]) {
+    router[path]();
+  } else {
+    // 정의되지 않은 경로일 경우 ErrorPage 렌더링
+    loadContent("root", ErrorPage());
+  }
+}
 
-window.addEventListener("load", () => {
-  route("/", () => {
-    loadContent("root", HomePage({ isLoggedIn: getLoginStatus() }));
-  });
+// 초기 라우팅 route 묶음
+handleRoute(window.location.pathname);
+
+// popstate 이벤트에서 라우팅 처리
+window.addEventListener("popstate", () => {
+  handleRoute(window.location.pathname);
 });
 
 const handleSubmit = (e) => {
@@ -100,14 +85,19 @@ window.addEventListener("click", (e) => {
     if (e.target.id === "logout") {
       localStorage.removeItem("user");
       history.pushState({}, "", "/login");
+      loadContent("root", LoginPage());
     } else if (e.target.id === "login") {
       if (getLoginStatus()) {
         history.pushState({}, "", "/");
       } else {
-        history.pushState({}, "", "/login");
+        loadContent("root", LoginPage());
       }
+    } else if (e.target.id === "/profile") {
+      history.pushState({}, "", "/profile");
+      loadContent("root", ProfilePage({ isLoggedIn: getLoginStatus() }));
+    } else if (e.target.id === "home") {
+      history.pushState({}, "", "/");
+      loadContent("root", HomePage({ isLoggedIn: getLoginStatus() }));
     }
-  } else if (e.target.id === "profile") {
-    history.pushState({}, "", "/profile");
   }
 });
