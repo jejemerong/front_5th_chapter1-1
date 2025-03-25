@@ -1,7 +1,6 @@
 // TODO: 헤더 상태
 export const Header = ({ isLoggedIn }) => {
   const currentPath = window.location.pathname;
-  console.log("currentPath", currentPath);
   return /* HTML */ `
     <div>
       <header class="bg-blue-600 text-white p-4 sticky top-0">
@@ -20,7 +19,7 @@ export const Header = ({ isLoggedIn }) => {
           </li>
           ${isLoggedIn
             ? `<li>
-                  <a href="/profile" class="${
+                  <a id="profile" href="/profile" class="${
                     currentPath === "/profile"
                       ? "text-blue-600 font-bold"
                       : "text-gray-600"
