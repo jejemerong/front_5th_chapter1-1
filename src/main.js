@@ -80,6 +80,7 @@ const handleSubmit = (e) => {
 window.addEventListener("submit", handleSubmit);
 
 window.addEventListener("click", (e) => {
+  const path = e.target.href;
   if (e.target.tagName === "A") {
     e.preventDefault();
     if (e.target.id === "logout") {
@@ -92,7 +93,7 @@ window.addEventListener("click", (e) => {
       } else {
         loadContent("root", LoginPage());
       }
-    } else if (e.target.id === "/profile") {
+    } else if (path === "/profile") {
       history.pushState({}, "", "/profile");
       loadContent("root", ProfilePage({ isLoggedIn: getLoginStatus() }));
     } else if (e.target.id === "home") {

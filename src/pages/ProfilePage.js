@@ -5,7 +5,7 @@ export default function ProfilePage({ isLoggedIn }) {
   const storagedUser = localStorage.getItem("user");
   const { username, email, bio } = JSON.parse(storagedUser);
   return /*HTML*/ `
-    <div id="profile" id="root">
+    <div id="root">
       <div class="bg-gray-100 min-h-screen flex justify-center">
         <div class="max-w-md w-full">
           ${Header({ isLoggedIn })}
