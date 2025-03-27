@@ -1,7 +1,9 @@
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { getLoginStatus } from "../main";
 
-export default function HomePage({ isLoggedIn }) {
+export default function HomePage() {
+  const isLoggedIn = getLoginStatus();
   return /* HTML */ `
     <div class="bg-gray-100 min-h-screen flex justify-center">
       <div class="max-w-md w-full">

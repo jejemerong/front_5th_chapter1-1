@@ -1,9 +1,14 @@
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { getLoginStatus } from "../main";
 
-export default function ProfilePage({ isLoggedIn }) {
-  const storagedUser = localStorage.getItem("user");
-  const { username, email, bio } = JSON.parse(storagedUser);
+export default function ProfilePage() {
+  const isLoggedIn = getLoginStatus();
+  // TODO: 로그인 안됐을 때 예외 처리
+  const storagedUser = localStorage.getItem("user"); //TODO: "" 는 falsy? 한 값이기 때문에 사용에 주의한다. // 잠시만요 이해할 시간을 좀 지금 뇌좀느려서요 // 빈문자열도 !가 잡는다... 이해가 안되는ㄴ데 이것도 자바스크립트 엔진이 ㅇ렇게 동작하기 때문인가요? 아하...!넵넵 우냐ㅕㅁ하게습다
+  // 근데 storageUser 가 undefined 인 경우에는 (안해봐서 모르겠지만) === null 을 그냥 통과하나요? 만약에 나온다면 null 이 잡을 수 // 아하~!~!알겠스비다.
+  if (storagedUser === null) return ""; // 문자열로 지금 리턴주고 있으니까 유저값없을경우 "" 해야함. // 그거는 취향차인가요? 아니면 기능적으로도 차이가 있을까여? 저는 무지성 ! 쓰긴하는데 아 == null 이요
+  const { username, email, bio } = JSON.parse(storagedUser); //네네
   return /*HTML*/ `
     <div id="root">
       <div class="bg-gray-100 min-h-screen flex justify-center">

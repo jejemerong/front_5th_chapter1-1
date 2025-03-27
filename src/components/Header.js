@@ -1,5 +1,7 @@
 // TODO: 헤더 상태
+// TODO: 근데 href 로 가져오려고하니까 또 안되더라고요? 그래서 그냥 id 네넨!!!
 export const Header = ({ isLoggedIn }) => {
+  console.log("isLoggedIn", isLoggedIn);
   const currentPath = window.location.pathname;
   return /* HTML */ `
     <div>
