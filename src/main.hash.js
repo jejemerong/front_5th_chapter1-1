@@ -17,7 +17,7 @@ function loadContent(content) {
 }
 
 function navigate(path) {
-  window.location.hash = path; // TODO: 근데 window 빼도 되는건가?
+  window.location.hash = path;
 }
 
 function handleRoute() {
@@ -34,8 +34,8 @@ function handleRoute() {
 
   // 로그인 안한 사용자가 프로필 접근 시, 로그인으로 이동
   if (!isLoggedIn && path === "/profile") {
-    window.location.hash = "/login";
-    loadContent(() => LoginPage);
+    navigate("/login");
+    loadContent(() => LoginPage());
     return;
   }
 
