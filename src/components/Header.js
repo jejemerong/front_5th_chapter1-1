@@ -1,5 +1,3 @@
-// TODO: 헤더 상태
-// TODO: 근데 href 로 가져오려고하니까 또 안되더라고요? 그래서 그냥 id 네넨!!!
 export const Header = ({ isLoggedIn }) => {
   const currentPath = window.location.pathname;
 
@@ -32,7 +30,7 @@ export const Header = ({ isLoggedIn }) => {
                 </li>`
             : `<li>
                   <a id="login" href="/login" class="${
-                    currentPath === "/login" // TODO: 해시 라우터, 기본 라우터 구분
+                    currentPath === "/login"
                       ? "text-blue-600 font-bold"
                       : "text-gray-600"
                   }">로그인</a>
