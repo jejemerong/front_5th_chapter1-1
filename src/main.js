@@ -11,55 +11,64 @@ const routes = {
   404: () => ErrorPage(),
 };
 
-function handleRoute(path) {
-  const route = routes[path];
-  if (route) {
-    const content = route();
-    loadContent(content, path);
-  } else {
-    loadContent(ErrorPage(), "404");
-  }
+function loadContent(content) {
+  document.getElementById("root").innerHTML = content();
 }
 
-function loadContent(content, path) {
-  const rootElement = document.getElementById("root");
-  const isLoggedIn = getLoginStatus();
+function navigate(path) {
+  window.history.replaceState({}, "", path);
+}
 
-  // 로그인한 상태에서 로그인 페이지 접근 시, 경로 변경
+function handleRoute() {
+  const isLoggedIn = getLoginStatus();
+  const path = window.location.pathname;
+  const page = routes[path];
+
+  // 로그인한 사용자가 로그인 페이지 접근 시, 홈으로 이동
   if (isLoggedIn && path === "/login") {
-    window.history.replaceState({}, "", "/");
-    rootElement.innerHTML = HomePage();
+    navigate("/");
+    loadContent(() => HomePage());
     return;
   }
-  // 로그인 안됐을 때, 프로필 접근 제한
+
+  // 로그인 안한 사용자가 프로필 접근 시, 로그인으로 이동
   if (!isLoggedIn && path === "/profile") {
-    window.history.pushState({}, "", "/login");
-    rootElement.innerHTML = LoginPage();
+    navigate("/login");
+    loadContent(() => LoginPage());
     return;
   }
-  window.history.pushState({}, "", path);
-  rootElement.innerHTML = content;
+
+  if (page) {
+    navigate(path);
+    loadContent(page);
+  } else {
+    loadContent(() => ErrorPage());
+  }
 }
 
 const handleClick = (e) => {
+  e.preventDefault();
   if (e.target.tagName === "A") {
-    e.preventDefault();
     switch (e.target.id) {
       case "logout":
         localStorage.removeItem("user");
-        handleRoute("/login"); // 이동하려고 하는 URL, 렌더링해야 하는 컴포넌트
+        navigate("/login");
+        handleRoute();
         break;
 
       case "login":
-        handleRoute("/login");
+        navigate("/login");
+        handleRoute();
         break;
 
       case "profile":
-        handleRoute("/profile");
+        navigate("/profile");
+        handleRoute();
         break;
 
       default:
-        handleRoute("/home");
+        navigate("/");
+        handleRoute();
         break;
     }
   }
@@ -79,7 +88,9 @@ const handleSubmit = (e) => {
       );
       username.value = "";
       password.value = "";
-      handleRoute("/");
+
+      navigate("/");
+      handleRoute();
     }
   }
 
@@ -93,14 +104,10 @@ const handleSubmit = (e) => {
   }
 };
 
-// TODO: hashroute 추가
-handleRoute(window.location.pathname);
-
 // 렌더가 되고 이벤트 등록
-window.addEventListener("popstate", () =>
-  handleRoute(window.location.pathname),
-);
+window.addEventListener("load", () => handleRoute());
+window.addEventListener("popstate", () => handleRoute());
 
-// 이벤트 위임...!
-document.body.addEventListener("submit", handleSubmit);
+// 이벤트 위임
 document.body.addEventListener("click", handleClick);
+document.body.addEventListener("submit", handleSubmit);
