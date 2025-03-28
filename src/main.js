@@ -47,8 +47,8 @@ function handleRoute() {
 }
 
 const handleClick = (e) => {
-  e.preventDefault();
   if (e.target.tagName === "A") {
+    e.preventDefault();
     switch (e.target.id) {
       case "logout":
         localStorage.removeItem("user");
