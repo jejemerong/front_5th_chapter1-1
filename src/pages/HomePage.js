@@ -1,6 +1,6 @@
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
-import { getLoginStatus } from "../main";
+import { getLoginStatus } from "../utils/getLoginStatus";
 
 export default function HomePage() {
   const isLoggedIn = getLoginStatus();
