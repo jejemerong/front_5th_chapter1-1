@@ -49,19 +49,20 @@ function handleRoute() {
 const handleClick = (e) => {
   if (e.target.tagName === "A") {
     e.preventDefault();
-    switch (e.target.id) {
-      case "logout":
+    const href = e.target.getAttribute("href"); // e.target.href 는 전체 URL, getAttribute 는 상대 경로만
+    switch (href) {
+      case "#":
         localStorage.removeItem("user");
         navigate("/login");
         handleRoute();
         break;
 
-      case "login":
+      case "/login":
         navigate("/login");
         handleRoute();
         break;
 
-      case "profile":
+      case "/profile":
         navigate("/profile");
         handleRoute();
         break;
@@ -75,9 +76,9 @@ const handleClick = (e) => {
 };
 
 const handleSubmit = (e) => {
+  e.preventDefault();
   // 로그인
   if (e.target.id === "login-form") {
-    e.preventDefault();
     const username = document.getElementById("username");
     const password = document.getElementById("password");
 
@@ -96,7 +97,6 @@ const handleSubmit = (e) => {
 
   // 프로필 업데이트
   if (e.target.id === "profile-form") {
-    e.preventDefault();
     const username = e.target.querySelector("#username").value;
     const email = e.target.querySelector("#email").value;
     const bio = e.target.querySelector("#bio").value;
@@ -105,7 +105,7 @@ const handleSubmit = (e) => {
 };
 
 // 렌더가 되고 이벤트 등록
-window.addEventListener("load", () => handleRoute());
+window.addEventListener("DOMContentLoaded", () => handleRoute());
 window.addEventListener("popstate", () => handleRoute());
 
 // 이벤트 위임

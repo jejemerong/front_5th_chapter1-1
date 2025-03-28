@@ -19,17 +19,17 @@ export const Header = ({ isLoggedIn }) => {
           </li>
           ${isLoggedIn
             ? `<li>
-                  <a id="profile" href="/profile" class="${
+                  <a href="/profile" class="${
                     currentPath === "/profile"
                       ? "text-blue-600 font-bold"
                       : "text-gray-600"
                   }">프로필</a>
                 </li>
                 <li>
-                  <a id="logout" href="/login" class="text-gray-600">로그아웃</a> 
+                  <a id="logout" href="#" class="text-gray-600">로그아웃</a> 
                 </li>`
             : `<li>
-                  <a id="login" href="/login" class="${
+                  <a href="/login" class="${
                     currentPath === "/login"
                       ? "text-blue-600 font-bold"
                       : "text-gray-600"
